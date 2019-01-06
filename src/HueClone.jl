@@ -114,8 +114,7 @@ using Blink
 Play the game using a Blink html window.
 """
 function play_blink()
-    w = Blink.Window(Dict(:width => 50*cols + 4, :height => 50*rows + 50), async=false)
-    create_board(w)
+    w = create_board()
     handle(w, "click") do pos
         handle_click(pos)
     end
@@ -123,37 +122,42 @@ function play_blink()
     play_game(w)
 end
 
-function create_board(w::Blink.Window)
+function create_board()
+    sq_size = 50
+    w = Blink.Window(Dict(:width => sq_size*cols + 4,
+                          :height => sq_size*rows + 40),
+                     async=false)
     body!(w, """
-    <style>
-    .square {
-        height:50px;
-        width:50px;
-    }
-    .grid {
-        display: flex;
-        border: 2px solid black;
-        width: fit-content;
-    }
-    .column {
-        display: flex;
-        flex-direction: column;
-    }
-    body {
-        background-color: lightgray;
-    }
-    </style>
-    <script>
-    function click_tile(r,c) {
-        Blink.msg("click", [r,c]);
-        console.log("HI")
-    }
-    </script>
-    <div class="grid">
-    </div>
-    <div class="messages">
-    </div>
+        <style>
+        .square {
+            height:$(sq_size)px;
+            width:$(sq_size)px;
+        }
+        .grid {
+            display: flex;
+            border: 2px solid black;
+            width: fit-content;
+        }
+        .column {
+            display: flex;
+            flex-direction: column;
+        }
+        body {
+            background-color: lightgray;
+        }
+        </style>
+        <script>
+        function click_tile(r,c) {
+            Blink.msg("click", [r,c]);
+            console.log("HI")
+        }
+        </script>
+        <div class="grid">
+        </div>
+        <div class="messages">
+        </div>
     """, async=false)
+    return w
 end
 function print_board(w::Blink.Window, tiles)
     content!(w, ".grid",
