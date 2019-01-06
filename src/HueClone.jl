@@ -6,6 +6,9 @@ module HueClone
 using Colors
 using Rematch # For matching text-based user input
 
+export play_blink, play_juno
+
+
 rows,cols = 4,3
 
 function create_colors_grid(rows,cols)
