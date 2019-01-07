@@ -2,7 +2,7 @@
 
 A very simplified clone of "I Love Hue" (http://i-love-hue.com/)
 
-Uses `Blink.jl` to create a simple html/css/js app that talks to the Julia game.
+Uses [`Blink.jl`](https://github.com/JunoLab/Blink.jl) to create a simple html/css/js app that talks to the Julia game.
 
 ## Installation
 
