@@ -9,9 +9,9 @@ using Rematch # For matching text-based user input
 export play_blink, play_juno
 
 
-rows,cols = 6,4
+const DEFAULT_ROWS, DEFAULT_COLS = 6,4
 
-function create_colors_grid(rows,cols)
+function create_colors_grid(rows, cols)
     corners = rand(RGB, 4)
     topleft,topright,bottomleft,bottomright = corners
 
@@ -34,11 +34,10 @@ macro swap!(a,b)
     end
 end
 
-fixed_tile_positions = [(1,1), (rows,1), (1,cols), (rows,cols)]
-
 function user_attempt_swap!(a, b)
-    global tiles
     a,b = Tuple(a), Tuple(b)
+    (r,c) = size(tiles)
+    fixed_tile_positions = [(1,1), (r,1), (1,c), (r,c)]
     if a == b || a in fixed_tile_positions || b in fixed_tile_positions
         return
     end
@@ -46,9 +45,7 @@ function user_attempt_swap!(a, b)
 end
 
 
-function new_game(r,c)
-    global rows,cols
-    rows,cols = r,c
+function new_game(rows, cols)
     global goal = create_colors_grid(rows, cols)
     global tiles = deepcopy(goal)
     for _ in 1:100
@@ -57,7 +54,7 @@ function new_game(r,c)
     end
 end
 
-function play_game(io_device; size=(rows,cols))
+function play_game(io_device; size=(DEFAULT_ROWS, DEFAULT_COLS))
     new_game(size...)
     while tiles != goal
         print_board(io_device, tiles)
@@ -79,7 +76,7 @@ struct JunoDisplay end
 
 Play the game in Atom, with the Juno REPL and Juno Plots display
 """
-play_juno(;size=(rows,cols)) = play_game(JunoDisplay(), size=size)
+play_juno(;size=(DEFAULT_ROWS, DEFAULT_COLS)) = play_game(JunoDisplay(), size=size)
 
 print_board(::JunoDisplay, tiles) = display(tiles)
 
@@ -115,7 +112,7 @@ using Blink
 
 Play the game using a Blink html window.
 """
-function play_blink(;size=(rows,cols))
+function play_blink(;size=(DEFAULT_ROWS, DEFAULT_COLS))
     w = create_board(size...)
     handle(w, "click") do pos
         handle_click(pos)
@@ -124,7 +121,7 @@ function play_blink(;size=(rows,cols))
     play_game(w; size=size)
 end
 
-function create_board(rows,cols)
+function create_board(rows, cols)
     sq_size = 50
     w = Blink.Window(Dict(:width => sq_size*cols + 4,
                           :height => sq_size*rows + 40),
