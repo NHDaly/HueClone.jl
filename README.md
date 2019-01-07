@@ -17,7 +17,7 @@ julia> using HueClone
 
 julia> HueClone.play_blink()  #  To play in a standalone blink window
 
-julia> HueClone.play_blink()  #  To play inside Atom, through the REPL and Plots display.
+julia> HueClone.play_juno()  #  To play inside Atom, through the REPL and Plots display.
 ```
 
 <img width="200px" src="docs/screenshot.png"/>
