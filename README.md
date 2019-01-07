@@ -21,3 +21,10 @@ julia> HueClone.play_juno()  #  To play inside Atom, through the REPL and Plots 
 ```
 
 <img width="200px" src="docs/screenshot.png"/>
+
+Change the number of squares with the `size` param:
+
+
+```julia
+julia> HueClone.play_blink(size=(6,4))
+```

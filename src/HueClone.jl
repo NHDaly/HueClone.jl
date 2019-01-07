@@ -9,7 +9,7 @@ using Rematch # For matching text-based user input
 export play_blink, play_juno
 
 
-rows,cols = 4,3
+rows,cols = 6,4
 
 function create_colors_grid(rows,cols)
     corners = rand(RGB, 4)
@@ -46,7 +46,9 @@ function user_attempt_swap!(a, b)
 end
 
 
-function new_game()
+function new_game(r,c)
+    global rows,cols
+    rows,cols = r,c
     global goal = create_colors_grid(rows, cols)
     global tiles = deepcopy(goal)
     for _ in 1:100
@@ -55,8 +57,8 @@ function new_game()
     end
 end
 
-function play_game(io_device)
-    new_game()
+function play_game(io_device; size=(rows,cols))
+    new_game(size...)
     while tiles != goal
         print_board(io_device, tiles)
         a,b = collect_userinput(io_device)
@@ -77,7 +79,7 @@ struct JunoDisplay end
 
 Play the game in Atom, with the Juno REPL and Juno Plots display
 """
-play_juno() = play_game(JunoDisplay())
+play_juno(;size=(rows,cols)) = play_game(JunoDisplay(), size=size)
 
 print_board(::JunoDisplay, tiles) = display(tiles)
 
@@ -113,16 +115,16 @@ using Blink
 
 Play the game using a Blink html window.
 """
-function play_blink()
-    w = create_board()
+function play_blink(;size=(rows,cols))
+    w = create_board(size...)
     handle(w, "click") do pos
         handle_click(pos)
     end
 
-    play_game(w)
+    play_game(w; size=size)
 end
 
-function create_board()
+function create_board(rows,cols)
     sq_size = 50
     w = Blink.Window(Dict(:width => sq_size*cols + 4,
                           :height => sq_size*rows + 40),
