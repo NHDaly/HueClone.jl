@@ -173,7 +173,7 @@ function print_board(w::Blink.Window, tiles)
                 """
                 for c in 1:size(tiles)[2]
                 ], "")
-        )
+        ; fade=false, async=false)
 end
 
 clicksChannel = Channel(2)
